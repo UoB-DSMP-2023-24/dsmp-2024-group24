@@ -15,28 +15,28 @@ random.seed(42)
 tf.set_random_seed(42)
 os.environ['PYTHONHASHSEED'] = '0'
 
-# 加载数据
+# load data
 gstock_data = pd.read_csv('E:/mini/output_segments2.csv', index_col='Date')
 
-# 选择 'Close', 'Max', 'Min' 特征
+# choose 'Open' 'Close', 'Max', 'Min' 
 gstock_data = gstock_data[['Open', 'Close', 'Max', 'Min']]
 
-# 检查并处理无限值或缺失值
+# Checking and handling infinite or missing values
 if np.isinf(gstock_data).values.any() or gstock_data.isnull().values.any():
     gstock_data.replace([np.inf, -np.inf], np.nan, inplace=True)
     gstock_data.fillna(gstock_data.mean(), inplace=True)
 
-# 归一化处理
+# normalisation
 Ms = MinMaxScaler()
 gstock_data[gstock_data.columns] = Ms.fit_transform(gstock_data)
 
 
-# 划分训练集和测试集
+# Divide the training set and test set
 train_data = gstock_data[:4500]
 test_data = gstock_data[4500:]
 
 
-# 创建序列和标签
+# Creating sequences and labels
 def create_sequence(dataset):
     sequences = []
     labels = []
@@ -49,53 +49,53 @@ def create_sequence(dataset):
 
     return (np.array(sequences), np.array(labels))
 
-# 创建序列数据和标签
+# Creating sequence data and labels
 train_seq, train_label = create_sequence(train_data)
 test_seq, test_label = create_sequence(test_data)
 
-# 建立LSTM模型
+# Building the LSTM model
 model = Sequential()
-# 第一个LSTM层
+# The first LSTM layer
 model.add(LSTM(units=50, return_sequences=True, input_shape=(train_seq.shape[1], train_seq.shape[2])))
 model.add(Dropout(0.2))
-# 添加第二个LSTM层，注意我们在这里也设置了 return_sequences=True
-model.add(LSTM(units=50, return_sequences=True))  # 可以调整units的数量
+# Add a second LSTM layer, note that we set return_sequences=True here as well
+model.add(LSTM(units=50, return_sequences=True))  
 model.add(Dropout(0.2))
-model.add(LSTM(units=50, return_sequences=True))  # 可以调整units的数量
+model.add(LSTM(units=50, return_sequences=True))  
 model.add(Dropout(0.2))
-# 添加最后一个LSTM层，此时不需要设置 return_sequences 参数
+# Add the last LSTM layer without setting the return_sequences parameter
 model.add(LSTM(units=50 ))
 model.add(Dropout(0.2))
-# 输出层，3个单元对应 'Close', 'Max', 'Min' 的预测
+# output
 model.add(Dense(4))
 
-# 编译模型
+# compilation model
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_absolute_error'])
 
-# 训练模型
+# fit
 history = model.fit(train_seq, train_label, epochs=80, validation_data=(test_seq, test_label), verbose=1)
 
-# 预测
+# pred
 test_predicted = model.predict(test_seq)
 
-# 逆归一化
+# inverse normalisation
 test_inverse_predicted = Ms.inverse_transform(test_predicted)
 
-# 创建新的DataFrame存储实际值和预测值
+# Creating a new DataFrame to store actual and predicted values
 gs_slic_data = pd.concat([
     gstock_data.iloc[-len(test_seq):],
     pd.DataFrame(test_inverse_predicted, columns=['Open_predicted', 'Close_predicted', 'Max_predicted', 'Min_predicted'], index=gstock_data.iloc[-len(test_seq):].index)
 ], axis=1)
 
-# 逆归一化原始特征
+# Inverse normalised primitive features
 gs_slic_data[gstock_data.columns] = Ms.inverse_transform(gs_slic_data[gstock_data.columns])
 
-# 显示数据
+# Display data
 print(gs_slic_data.head())
 
 
 
-# 保存数据
+# save data
 gs_slic_data.to_csv('E:/mini/f2/baoshen_predictions5.csv', index=True)
 
 for feature in ['Open', 'Close', 'Max', 'Min']:
@@ -103,13 +103,13 @@ for feature in ['Open', 'Close', 'Max', 'Min']:
     rmse = np.sqrt(mse)
     print(f'RMSE for {feature}: {rmse}')
 
-# 计算R²
+# R²
 for feature in ['Open', 'Close', 'Max', 'Min']:
     r2 = r2_score(gs_slic_data[feature], gs_slic_data[f'{feature}_predicted'])
     print(f'R² for {feature}: {r2}')
 
 
-# 绘制实际值和预测值
+# Plotting actual and projected values
 features = ['Open', 'Close', 'Max', 'Min']
 for feature in features:
     plt.figure(figsize=(10, 4))
@@ -119,7 +119,7 @@ for feature in features:
     plt.title(f'{feature} Actual vs Predicted')
     plt.show()
 
-# 绘制训练损失和验证损失
+# Plotting training loss and validation loss
 plt.figure(figsize=(10, 5))
 plt.plot(history.history['loss'], label='Train Loss')
 plt.plot(history.history['val_loss'], label='Validation Loss')
