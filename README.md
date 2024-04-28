@@ -5,5 +5,5 @@ Group Number: 24
 
 Problem Assigned: Problem B
 
-Group Members:
+Group Members: Hanting Bao, Menglong Li, Zhaokun Zhang, Zhe Zhou
 
