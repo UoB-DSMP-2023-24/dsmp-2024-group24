@@ -8,14 +8,13 @@ from backtesting.lib import crossover
 from backtesting.test import SMA, GOOG
 
 
-# data = pd.read_csv('C:\\Users\\bht\\Desktop\\combine1_no_decimals.csv', index_col='Date', parse_dates=True)
-data = pd.read_csv('C:\\Users\\bht\\Desktop\\baoshen\\baoshen\\true1.csv', index_col='Date', parse_dates=True)
-# data = pd.read_csv('C:\\Users\\bht\\Desktop\\baoshen\\baoshen\\combine1.csv', index_col='Date', parse_dates=True)
-# data = pd.read_csv('C:\\Users\\bht\\Desktop\\baoshen\\baoshen\\combine3.csv', index_col='Date', parse_dates=True)
-# data = pd.read_csv('C:\\Users\\bht\\Desktop\\baoshen\\baoshen\\combine4.csv', index_col='Date', parse_dates=True)
-# data = pd.read_csv('C:\\Users\\bht\\Desktop\\baoshen\\baoshen\\combine5.csv', index_col='Date', parse_dates=True)
-data.rename(columns={'Highest Price': 'High', 'Lowest Price': 'Low','Opening Price': 'Open','Closing Price': 'Close'}, inplace=True)
-# data.rename(columns={'Opening_Price': 'Open', 'Closing_Price': 'Close','Max_Value': 'High','Min_Value': 'Low'}, inplace=True)
+# data = pd.read_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\true.csv', index_col='Date', parse_dates=True)
+# data = pd.read_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\combine1.csv', index_col='Date', parse_dates=True)
+# data = pd.read_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\combine2.csv', index_col='Date', parse_dates=True)
+# data = pd.read_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\combine3.csv', index_col='Date', parse_dates=True)
+# data = pd.read_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\combine4.csv', index_col='Date', parse_dates=True)
+data = pd.read_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\combine5.csv', index_col='Date', parse_dates=True)
+data.rename(columns={'Opening_Price': 'Open', 'Closing_Price': 'Close','Max_Value': 'High','Min_Value': 'Low'}, inplace=True)
 
 class SmaCross(Strategy):
     n1 = 5
@@ -60,8 +59,9 @@ trades_df = pd.DataFrame({
 print(trades_df)
 
 # Save the trading hours table as a CSV file
-trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\true.csv', index=False)
-trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\combine1.csv', index=False)
-trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\combine3.csv', index=False)
-trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\combine4.csv', index=False)
-trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\combine5.csv', index=False)
+# trades_df.to_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\true_trade.csv', index=False)
+# trades_df.to_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\c1_trade.csv', index=False)
+# trades_df.to_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\c2_trade.csv', index=False)
+# trades_df.to_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\c3_trade.csv', index=False)
+# trades_df.to_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\c4_trade.csv', index=False)
+trades_df.to_csv('C:\\Users\\bht\\Desktop\\Mini-project\\result\\c5_trade.csv', index=False)
