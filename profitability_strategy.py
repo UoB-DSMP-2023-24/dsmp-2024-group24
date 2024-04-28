@@ -42,24 +42,24 @@ print(output)
 
 bt.plot()
 
-# 获取交易记录的 DataFrame
+# Get the DataFrame of the transaction record
 trades = output['_trades']
 
 print(type(trades))
 print(trades)
 
 
-# 创建一个 DataFrame 来存储买卖时间和类型
+# Create a DataFrame to store the time and type of purchase and sale
 trades_df = pd.DataFrame({
     'Entry Time': trades['EntryTime'],
     'Exit Time': trades['ExitTime'],
     'Type': trades['Size'].apply(lambda x: 'Buy' if x > 0 else 'Sell')
 })
 
-# 打印交易时间表格
+# Printable Trading Hours Form
 print(trades_df)
 
-# 保存交易时间表格为 CSV 文件
+# Save the trading hours table as a CSV file
 trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\true.csv', index=False)
 trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\combine1.csv', index=False)
 trades_df.to_csv('C:\\Users\\bht\\Desktop\\baoshen\\combine3.csv', index=False)
