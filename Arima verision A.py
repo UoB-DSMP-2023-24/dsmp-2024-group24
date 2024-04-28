@@ -3,18 +3,18 @@ from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import math
 
-# 读取数据
+# load data
 net_df = pd.read_csv("/Users/huashenglong/Desktop/output2.csv", index_col="Date", parse_dates=True)
 
-# 划分训练集和测试集
+# Divide the training set and test set
 train_data = net_df.iloc[:int(len(net_df) * 0.9)]
 test_data = net_df.iloc[int(len(net_df) * 0.9):]
 
-# 初始化 history
+# Initialise history
 history = [x for x in train_data['Max']]
 y = test_data['Max']
 
-# 进行第一次预测
+# Conducting the first forecast
 predictions = []
 model = ARIMA(history, order=(1, 1, 0))
 model_fit = model.fit()
@@ -22,19 +22,19 @@ yhat = model_fit.forecast()[0]
 predictions.append(yhat)
 history.append(y.iloc[0])
 
-# 滚动预测
+# rolling forecast
 for i in range(1, len(y)):
-    # 预测
+    # forecast
     model = ARIMA(history, order=(1, 1, 0))
     model_fit = model.fit()
     yhat = model_fit.forecast()[0]
-    # 反转转换预测值
+    # Inverted conversion forecasts
     predictions.append(yhat)
-    # 观察结果
+    # result
     obs = y.iloc[i]
     history.append(obs)
 
-# 报告性能
+# Reporting Performance
 mse = mean_squared_error(y, predictions)
 print('MSE: ' + str(mse))
 mae = mean_absolute_error(y, predictions)
